@@ -78,7 +78,6 @@ class TestVisitedGrid:
         self.assert_file_is_prepared(x, y)
 
     @pytest.mark.parametrize("file_name, x, y", [
-        #("data_9x8", 100, 33),
         ("data_10x1", 1, 1),
     ])
     def test_file_should_raise_error_when_not_proper_coordinates_have_been_passed(

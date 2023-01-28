@@ -1,6 +1,6 @@
 import os.path
 from abc import abstractmethod
-from typing import BinaryIO, Iterable, Callable
+from typing import BinaryIO, Iterable
 
 
 BLOCK_SIZE = 16777216
@@ -10,10 +10,6 @@ BYTE_SIZE = 1
 
 class DataError(Exception):
     pass
-
-
-def raise_data_error():
-    raise DataError
 
 
 class File:
@@ -28,7 +24,6 @@ class File:
         pass        # pragma: no cover
 
     def read(self, x: int, y: int) -> int:
-        print("read")
         with open(self.path, "r+b") as file:
             id_of_byte = self._get_id_of_byte(x, y)
             i = 0
@@ -55,12 +50,10 @@ class File:
                     result += 1
             raise DataError
 
-    def _read_in_blocks(self, file_object: BinaryIO, emergency_func: Callable = None) -> Iterable:
+    def _read_in_blocks(self, file_object: BinaryIO) -> Iterable:
         while True:
             data = file_object.read(self._block_size)
             if not data:
-                if emergency_func:
-                    emergency_func()
                 break
             yield data
 
@@ -101,7 +94,7 @@ class VisitedFile(File):
     def _mark(self, file: BinaryIO, x: int, y: int) -> None:
         id_of_byte = self._get_id_of_byte(x, y)
         i = 0
-        for block in self._read_in_blocks(file, raise_data_error):
+        for block in self._read_in_blocks(file):
             if self._byte_is_in_current_block(id_of_byte, i):
                 self._update_block(block, file, id_of_byte, i)
                 break
@@ -124,10 +117,7 @@ class VisitedFile(File):
             raise DataError
 
     def __del__(self):
-        try:
-            os.remove(self.path)
-        except FileNotFoundError:
-            pass
+        os.remove(self.path)
 
 
 class OriginalFile(File):
