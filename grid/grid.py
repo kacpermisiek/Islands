@@ -1,26 +1,27 @@
-from database.database import Database
+from file.file import OriginalFile, VisitedFile
 
 
 class Grid:
     def __init__(self, file_path: str) -> None:
-        self._db = Database(file_path)
+        self._grid_path = OriginalFile(file_path)
+        self._visited_path = VisitedFile(self._grid_path.rows, self._grid_path.cols)
 
     @property
     def height(self) -> int:
-        return self._db.num_of_rows
+        return self._grid_path.rows
 
     @property
     def width(self) -> int:
-        return self._db.num_of_cols
+        return self._grid_path.cols
 
     def is_land(self, x: int, y: int) -> bool:
-        return self._db.read('map', x, y) == 1
+        return self._grid_path.read(x, y) == 1
 
     def is_visited(self, x: int, y: int) -> bool:
-        return self._db.read('visited', x, y) == 1
+        return self._visited_path.read(x, y) == 1
 
     def mark_as_visited(self, x: int, y: int):
-        self._db.update('visited', x, y, 1)
+        self._visited_path.mark(x, y)
 
     def is_in_matrix(self, x: int, y: int) -> bool:
         return 0 <= x < self.width and 0 <= y < self.height

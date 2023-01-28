@@ -1,7 +1,6 @@
 import os
 import pytest
 from counter.counter import Counter
-from grid.grid import Grid
 
 
 def file_path(file_name: str) -> str:
@@ -19,7 +18,7 @@ class TestCounter:
         ("data_8x9", 4),
         ("data_3x3", 2),
         ("data_4x4", 1),
-        #("data_100x100", 50)
+        ("data_100x100", 50)
     ])
     def test_counter_should_return_expected_num_of_islands(
             self, sut: Counter, file_name: str, expected_islands: int) -> None:

@@ -1,8 +1,7 @@
 import pytest
 import os.path
 from collections import namedtuple
-
-from database.database import DataError
+from file.file import DataError
 from grid.grid import Grid
 
 GridSize = namedtuple("GridSize", ['rows', 'cols'])
